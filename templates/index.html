@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFlow Analytics - Advanced Data Analysis Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+        <div class="floating-shape shape-5"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40">
+                    <circle cx="20" cy="20" r="18" fill="url(#gradient1)"/>
+                    <defs>
+                        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea"/>
+                            <stop offset="100%" style="stop-color:#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>DataFlow Analytics</h1>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link active" data-section="analytics">Analytics</a>
+                <a href="#" class="nav-link" data-section="pdf-tools">PDF Tools</a>
+                <a href="#" class="nav-link" data-section="image-tools">Image Tools</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Analytics Section -->
+            <section id="analytics-section" class="section active">
+                <div class="section-header">
+                    <h2>Data Analytics Dashboard</h2>
+                    <p>Upload your data and explore powerful analytical insights</p>
+                </div>
+
+                <div class="tool-grid">
+                    <!-- Data Upload Card -->
+                    <div class="card upload-card">
+                        <div class="card-header">
+                            <h3>📊 Data Upload</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="upload-area" id="uploadArea">
+                                <svg width="60" height="60" viewBox="0 0 60 60">
+                                    <path d="M30 10 L30 40 M20 30 L30 20 L40 30" stroke="#667eea" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                    <rect x="10" y="45" width="40" height="5" fill="#667eea" rx="2"/>
+                                </svg>
+                                <p>Drag & drop your Excel/CSV file</p>
+                                <span>or</span>
+                                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+                                <input type="file" id="fileInput" accept=".xlsx,.csv" hidden>
+                            </div>
+                            
+                            <div class="manual-entry-toggle">
+                                <button class="btn btn-secondary" onclick="toggleManualEntry()">✏️ Enter Data Manually</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manual Data Entry -->
+                    <div class="card manual-entry-card" id="manualEntryCard" style="display: none;">
+                        <div class="card-header">
+                            <h3>✏️ Manual Data Entry</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="dataTable"></div>
+                            <div class="button-group">
+                                <button class="btn btn-success" onclick="addRow()">+ Add Row</button>
+                                <button class="btn btn-primary" onclick="analyzeManualData()">Analyze Data</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Tools -->
+                    <div class="card tools-card" id="toolsCard" style="display: none;">
+                        <div class="card-header">
+                            <h3>🛠️ Analysis Tools</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="tool-item" onclick="showSmoothingModal()">
+                                <span class="tool-icon">📈</span>
+                                <div>
+                                    <h4>Data Smoothing</h4>
+                                    <p>Apply moving average, exponential, or Savitzky-Golay smoothing</p>
+                                </div>
+                            </div>
+                            <div class="tool-item" onclick="showBinningModal()">
+                                <span class="tool-icon">📦</span>
+                                <div>
+                                    <h4>Data Binning</h4>
+                                    <p>Group data into equal-width or equal-frequency bins</p>
+                                </div>
+                            </div>
+                            <div class="tool-item" onclick="showNormalizationModal()">
+                                <span class="tool-icon">⚖️</span>
+                                <div>
+                                    <h4>Normalization</h4>
+                                    <p>Standardize data using Z-score normalization</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Display -->
+                    <div class="card results-card" id="resultsCard" style="display: none;">
+                        <div class="card-header">
+                            <h3>📊 Analysis Results</h3>
+                            <button class="btn btn-download" onclick="downloadResults()">⬇️ Download</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="tabs">
+                                <button class="tab-btn active" data-tab="statistics">Statistics</button>
+                                <button class="tab-btn" data-tab="visualizations">Visualizations</button>
+                                <button class="tab-btn" data-tab="correlation">Correlation</button>
+                            </div>
+                            <div id="resultsContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PDF Tools Section -->
+            <section id="pdf-tools-section" class="section">
+                <div class="section-header">
+                    <h2>PDF Management Tools</h2>
+                    <p>Merge multiple PDFs into one document</p>
+                </div>
+
+                <div class="tool-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📄 PDF Merger</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="upload-area" id="pdfUploadArea">
+                                <svg width="60" height="60" viewBox="0 0 60 60">
+                                    <rect x="15" y="10" width="30" height="40" fill="none" stroke="#f093fb" stroke-width="3" rx="3"/>
+                                    <line x1="20" y1="20" x2="35" y2="20" stroke="#f093fb" stroke-width="2"/>
+                                    <line x1="20" y1="28" x2="40" y2="28" stroke="#f093fb" stroke-width="2"/>
+                                    <line x1="20" y1="36" x2="32" y2="36" stroke="#f093fb" stroke-width="2"/>
+                                </svg>
+                                <p>Select multiple PDF files to merge</p>
+                                <button class="btn btn-primary" onclick="document.getElementById('pdfInput').click()">Select PDFs</button>
+                                <input type="file" id="pdfInput" accept=".pdf" multiple hidden>
+                            </div>
+                            <div id="pdfList"></div>
+                            <button class="btn btn-success" id="mergePdfBtn" style="display: none;" onclick="mergePDFs()">Merge PDFs</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Image Tools Section -->
+            <section id="image-tools-section" class="section">
+                <div class="section-header">
+                    <h2>Image Conversion Tools</h2>
+                    <p>Convert between JPG and PDF formats</p>
+                </div>
+
+                <div class="tool-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🖼️ JPG to PDF</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="upload-area">
+                                <p>Select JPG/PNG images to convert</p>
+                                <button class="btn btn-primary" onclick="document.getElementById('jpgInput').click()">Select Images</button>
+                                <input type="file" id="jpgInput" accept="image/*" multiple hidden>
+                            </div>
+                            <div id="jpgList"></div>
+                            <button class="btn btn-success" id="convertJpgBtn" style="display: none;" onclick="convertJpgToPdf()">Convert to PDF</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📄 PDF to JPG</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="upload-area">
+                                <p>Select a PDF file to convert to images</p>
+                                <button class="btn btn-primary" onclick="document.getElementById('pdfToJpgInput').click()">Select PDF</button>
+                                <input type="file" id="pdfToJpgInput" accept=".pdf" hidden>
+                            </div>
+                            <div id="pdfToJpgStatus"></div>
+                            <button class="btn btn-success" id="convertPdfBtn" style="display: none;" onclick="convertPdfToJpg()">Convert to JPG</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal" id="smoothingModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('smoothingModal')">&times;</span>
+            <h3>Data Smoothing</h3>
+            <div class="form-group">
+                <label>Select Column:</label>
+                <select id="smoothColumn" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label>Method:</label>
+                <select id="smoothMethod" class="form-control">
+                    <option value="moving_average">Moving Average</option>
+                    <option value="exponential">Exponential Smoothing</option>
+                    <option value="savgol">Savitzky-Golay</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Window Size:</label>
+                <input type="number" id="smoothWindow" class="form-control" value="3" min="2">
+            </div>
+            <button class="btn btn-primary" onclick="applySmoothing()">Apply</button>
+        </div>
+    </div>
+
+    <!-- Audio for touch feedback -->
+    <audio id="clickSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRhwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+    </audio>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
